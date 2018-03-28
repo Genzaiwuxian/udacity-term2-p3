@@ -225,8 +225,12 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
 
 					double gauss_norm = (1 / (2 * M_PI*std_x*std_y));
 					double exponent = ((diff_x2) / (2 * std_x2) + (diff_y2) / (2 * std_y2));
+					cout << "gauss_norm: " << gauss_norm << endl;
+					cout << "exponent: " << exponent << endl;
 
 					weights_diff *= gauss_norm * exp(-exponent);
+
+					cout <<"weights_diff: "<< weights_diff << endl;
 				}
 			}
 		}
