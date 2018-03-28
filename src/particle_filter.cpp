@@ -27,7 +27,7 @@ void ParticleFilter::init(double x, double y, double theta, double std[]) {
 	if (!is_initialized)
 	{
 		//set total particles number
-		num_particles = 20;
+		num_particles = 60;
 
 		default_random_engine gen;
 
@@ -100,7 +100,7 @@ void ParticleFilter::dataAssociation(std::vector<LandmarkObs> predicted, std::ve
 			double obs_y = observations[j].y;
 
 			double best_distance = 10000.0;
-			int best_id;
+			int best_id = -1;
 
 			for (decltype(predicted.size()) i = 0; i < predicted.size(); ++i)
 			{
@@ -108,13 +108,7 @@ void ParticleFilter::dataAssociation(std::vector<LandmarkObs> predicted, std::ve
 				double p_x = predicted[i].x;
 				double p_y = predicted[i].y;
 
-				double diff_x = p_x - obs_x;
-				double diff_x2 = diff_x * diff_x;
-
-				double diff_y = p_y - obs_y;
-				double diff_y2 = diff_y * diff_y;
-
-				double distance_diff = sqrt(diff_x2 + diff_y2);
+				double distance_diff = dist(p_x, p_y, obs_x, obs_y);
 				if (distance_diff < best_distance)
 				{
 					best_distance = distance_diff;
