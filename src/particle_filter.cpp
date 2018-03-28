@@ -190,7 +190,7 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
 		//association
 		ParticleFilter::dataAssociation(predictions, observations_transform);
 
-		/*
+
 		for (unsigned int k = 0; k < predictions.size(); ++k)
 		{
 			cout << "prediction: " << k << endl;
@@ -207,7 +207,6 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
 			cout << observations_transform[j].y << endl;
 		}
 
-		*/
 
 		//update weights
 		double weights_diff = 1.0;
@@ -215,6 +214,7 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
 		{
 			for (decltype(observations_transform.size()) j = 0; j < observations_transform.size(); ++j)
 			{
+				
 				if (observations_transform[j].id == predictions[i].id)
 				{
 					double diff_x = observations_transform[j].x - predictions[i].x;
@@ -225,22 +225,23 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
 
 					double gauss_norm = (1 / (2 * M_PI*std_x*std_y));
 					double exponent = ((diff_x2) / (2 * std_x2) + (diff_y2) / (2 * std_y2));
-					cout << "gauss_norm: " << gauss_norm << endl;
-					cout << "exponent: " << exponent << endl;
+					// cout << "gauss_norm: " << gauss_norm << endl;
+					// cout << "exponent: " << exponent << endl;
 					double weight_temp = gauss_norm * exp(-exponent);
-					cout << "weight_temp: " << weight_temp << endl;
+					// cout << "weight_temp: " << weight_temp << endl;
 					weights_diff *= weight_temp;
-				}
+				} 
 			}
 		}
-		cout << "weights_diff: " << weights_diff << endl;
+		// cout << "weights_diff: " << weights_diff << endl;
 		particles[i].weight = weights_diff;
 		weights.push_back(weights_diff);
-		cout << "particle: " << i << " weight is " << particles[i].weight << endl;
+		// cout << "particle: " << i << " weight is " << particles[i].weight << endl;
 	}
 
 	//normalized weights
 	double sum_weights = accumulate(weights.begin(), weights.end(), 0);
+	cout << "sum_weights: " << sum_weights << endl;
 	for (unsigned int i = 0; i < num_particles; ++i)
 	{
 		particles[i].weight /= sum_weights;
