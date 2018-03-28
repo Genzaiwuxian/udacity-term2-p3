@@ -229,14 +229,13 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
 					cout << "exponent: " << exponent << endl;
 
 					weights_diff *= gauss_norm * exp(-exponent);
-
-					cout <<"weights_diff: "<< weights_diff << endl;
 				}
 			}
 		}
+		cout << "weights_diff: " << weights_diff << endl;
 		particles[i].weight = weights_diff;
 		weights.push_back(weights_diff);
-		// cout << "particle: " << i << " weight is " << particles[i].weight << endl;
+		cout << "particle: " << i << " weight is " << particles[i].weight << endl;
 	}
 
 	//normalized weights
