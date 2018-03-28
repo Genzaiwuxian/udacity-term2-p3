@@ -237,7 +237,7 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
 				} 
 			}
 		}
-		<< "weights_diff: " << weights_diff << endl;
+		cout<< "weights_diff: " << weights_diff << endl;
 		particles[i].weight = weights_diff;
 		weights_sum.push_back(weights_diff);
 		// cout << "particle: " << i << " weight is " << particles[i].weight << endl;
