@@ -242,15 +242,6 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
 		weights_sum.push_back(weights_diff);
 		// cout << "particle: " << i << " weight is " << particles[i].weight << endl;
 	}
-
-	//normalized weights
-	double sum_weights = accumulate(weights_sum.begin(), weights_sum.end(), 0);
-	cout << "sum_weights: " << sum_weights << endl;
-	for (unsigned int i = 0; i < num_particles; ++i)
-	{
-		particles[i].weight = particles[i].weight/sum_weights;
-	}
-
 	weights = weights_sum;
 }
 
