@@ -194,7 +194,7 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
 		double weights_diff = 1.0;
 		for (decltype(predictions.size()) i = 0; i < predictions.size(); ++i)
 		{
-			for (decltype(observations_transform.size() j = 0; j < observations_transform.size(); ++j)
+			for (decltype(observations_transform.size()) j = 0; j < observations_transform.size(); ++j)
 			{
 				if (observations_transform[j].id == predictions[i].id)
 				{
@@ -233,7 +233,7 @@ void ParticleFilter::resample() {
 
 	double beta = 0.0;
 
-	discrete_distribution<double> weight_distribution(0.0, max_weight);
+	uniform_real_distribution<double> weight_distribution(0.0, max_weight);
 	
 	vector<Particle> particles_resample;
 	for (unsigned int i = 0; i < num_particles; ++i)
