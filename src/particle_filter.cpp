@@ -93,21 +93,20 @@ void ParticleFilter::dataAssociation(std::vector<LandmarkObs> predicted, std::ve
 
 	if (predicted.size() != 0 && observations.size() != 0)
 	{
-		for (decltype(predicted.size()) i = 0; i < predicted.size(); ++i)
+		for (decltype(observations.size()) j = 0; j < observations.size(); ++j)
 		{
-			//transformation
-			int p_id = predicted[i].id;
-			double p_x = predicted[i].x;
-			double p_y = predicted[i].y;
+			int obs_id = observations[j].id;
+			double obs_x = observations[j].x;
+			double obs_y = observations[j].y;
 
 			double best_distance = 10000.0;
-			decltype(observations.size()) best_id = 0;
+			int best_id;
 
-			for (decltype(observations.size()) j = 0; j < observations.size(); ++j)
+			for (decltype(predicted.size()) i = 0; i < predicted.size(); ++i)
 			{
-				int obs_id = observations[j].id;
-				double obs_x = observations[j].x;
-				double obs_y = observations[j].y;
+				int p_id = predicted[i].id;
+				double p_x = predicted[i].x;
+				double p_y = predicted[i].y;
 
 				double diff_x = p_x - obs_x;
 				double diff_x2 = diff_x * diff_x;
@@ -119,11 +118,11 @@ void ParticleFilter::dataAssociation(std::vector<LandmarkObs> predicted, std::ve
 				if (distance_diff < best_distance)
 				{
 					best_distance = distance_diff;
-					best_id = j;
+					best_id = p_id;
 				}
 			}
-			
-			observations[best_id].id = p_id;
+
+			observations[j].id = best_id;
 
 		}
 	}
@@ -190,7 +189,8 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
 		//association
 		ParticleFilter::dataAssociation(predictions, observations_transform);
 
-
+		/*
+		
 		for (unsigned int k = 0; k < predictions.size(); ++k)
 		{
 			cout << "prediction: " << k << endl;
@@ -206,6 +206,8 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
 			cout << observations_transform[j].x << endl;
 			cout << observations_transform[j].y << endl;
 		}
+		*/
+		
 
 
 		//update weights
