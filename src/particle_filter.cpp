@@ -27,7 +27,7 @@ void ParticleFilter::init(double x, double y, double theta, double std[]) {
 	if (!is_initialized)
 	{
 		//set total particles number
-		num_particles = 100;
+		num_particles = 20;
 
 		default_random_engine gen;
 
@@ -263,7 +263,7 @@ void ParticleFilter::resample() {
 	vector<Particle> particles_resample;
 	for (unsigned int i = 0; i < num_particles; ++i)
 	{
-		beta += 2*weight_distribution(gen);
+		beta += 2.0*weight_distribution(gen);
 		while (particles[index].weight < beta)
 		{
 			beta -= particles[index].weight;
