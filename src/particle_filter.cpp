@@ -190,6 +190,7 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
 		//association
 		ParticleFilter::dataAssociation(predictions, observations_transform);
 
+		/*
 		for (unsigned int k = 0; k < predictions.size(); ++k)
 		{
 			cout << "prediction: " << k << endl;
@@ -206,6 +207,8 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
 			cout << observations_transform[j].y << endl;
 		}
 
+		*/
+
 		//update weights
 		double weights_diff = 1.0;
 		for (decltype(predictions.size()) i = 0; i < predictions.size(); ++i)
@@ -215,12 +218,15 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
 				if (observations_transform[j].id == predictions[i].id)
 				{
 					double diff_x = observations_transform[j].x - predictions[i].x;
-						double diff_x2 = diff_x * diff_x;
+					double diff_x2 = diff_x * diff_x;
 
-						double diff_y = observations_transform[j].x - predictions[i].x;
-						double diff_y2 = diff_y * diff_y;
+					double diff_y = observations_transform[j].y - predictions[i].y;
+					double diff_y2 = diff_y * diff_y;
 
-						weights_diff *= ((1 / (2 * M_PI*std_x*std_y))*exp(-((diff_x2 / (2 * std_x2)) + (diff_y2 / (2 * std_y2)))));
+					double gauss_norm = (1 / (2 * M_PI*std_x*std_y));
+					double exponent = ((diff_x2) / (2 * std_x2) + (diff_y2) / (2 * std_y2));
+
+					weights_diff *= gauss_norm * exp(-exponent);
 				}
 			}
 		}
