@@ -153,6 +153,8 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
 	double std_x2 = std_x * std_x;
 	double std_y2 = std_y * std_y;
 
+	vector<double> weights_sum;
+
 	for (unsigned int i=0;i<num_particles;++i)
 	{
 		int p_id = particles[i].id;
@@ -237,17 +239,19 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
 		}
 		// cout << "weights_diff: " << weights_diff << endl;
 		particles[i].weight = weights_diff;
-		weights.push_back(weights_diff);
+		weights_sum.push_back(weights_diff);
 		// cout << "particle: " << i << " weight is " << particles[i].weight << endl;
 	}
 
 	//normalized weights
-	double sum_weights = accumulate(weights.begin(), weights.end(), 0);
+	double sum_weights = accumulate(weights_sum.begin(), weights_sum.end(), 0);
 	cout << "sum_weights: " << sum_weights << endl;
 	for (unsigned int i = 0; i < num_particles; ++i)
 	{
-		particles[i].weight /= sum_weights;
+		particles[i].weight = particles[i].weight/sum_weights;
 	}
+
+	weights = weights_sum;
 }
 
 void ParticleFilter::resample() {
@@ -269,7 +273,7 @@ void ParticleFilter::resample() {
 	for (unsigned int i = 0; i < num_particles; ++i)
 	{
 		beta += 2*weight_distribution(gen);
-		if (particles[index].weight < beta)
+		while (particles[index].weight < beta)
 		{
 			beta -= particles[index].weight;
 			index=(index+1)%num_particles;
