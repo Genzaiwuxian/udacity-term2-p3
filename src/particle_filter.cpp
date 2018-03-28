@@ -190,6 +190,12 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
 		//association
 		ParticleFilter::dataAssociation(predictions, observations_transform);
 
+		cout << "prediction: " << i << endl;
+		cout << predictions << endl;
+
+		cout << "observations_transform: " << i << endl;
+		cout << observations_transform << endl;
+
 		//update weights
 		double weights_diff = 1.0;
 		for (decltype(predictions.size()) i = 0; i < predictions.size(); ++i)
@@ -210,7 +216,7 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
 		}
 		particles[i].weight = weights_diff;
 		weights.push_back(weights_diff);
-		cout << "particle: " << i << " weight is " << particles[i].weight << endl;
+		// cout << "particle: " << i << " weight is " << particles[i].weight << endl;
 	}
 
 	//normalized weights
