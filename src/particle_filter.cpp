@@ -251,11 +251,11 @@ void ParticleFilter::resample() {
 	for (unsigned int i = 0; i < num_particles; ++i)
 	{
 		weights_sum.push_back(particles[i].weight);
-		total += particles[i].weight;
+		total_weights += particles[i].weight;
 	}
 
 	for (unsigned int i = 0; i < num_particles; ++i)
-		weights_sum /= total_weights;
+		weights_sum[i] /= total_weights;
 
 
 	default_random_engine gen;
