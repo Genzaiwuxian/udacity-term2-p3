@@ -215,17 +215,16 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
 
 		//update weights
 		double weights_diff = 1.0;
-		for (decltype(predictions.size()) i = 0; i < predictions.size(); ++i)
+		for (decltype(observations_transform.size()) m = 0; m < observations_transform.size(); ++m)
 		{
-			for (decltype(observations_transform.size()) j = 0; j < observations_transform.size(); ++j)
+			for (decltype(predictions.size()) n = 0; n < predictions.size(); ++n)
 			{
-				
-				if (observations_transform[j].id == predictions[i].id)
+				if (observations_transform[m].id == predictions[n].id)
 				{
-					double diff_x = observations_transform[j].x - predictions[i].x;
+					double diff_x = observations_transform[m].x - predictions[n].x;
 					double diff_x2 = diff_x * diff_x;
 
-					double diff_y = observations_transform[j].y - predictions[i].y;
+					double diff_y = observations_transform[m].y - predictions[n].y;
 					double diff_y2 = diff_y * diff_y;
 
 					double gauss_norm = (1 / (2 * M_PI*std_x*std_y));
@@ -235,7 +234,7 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
 					double weight_temp = gauss_norm * exp(-exponent);
 					// cout << "weight_temp: " << weight_temp << endl;
 					weights_diff *= weight_temp;
-				} 
+				}
 			}
 		}
 		// cout<< "weights_diff: " << weights_diff << endl;
