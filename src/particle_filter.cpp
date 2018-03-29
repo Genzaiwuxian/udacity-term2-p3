@@ -268,7 +268,7 @@ void ParticleFilter::resample() {
 
 	uniform_real_distribution<double> weight_distribution(0.0, max_weight);
 	
-	vector<Particle> particles_resample(num_particles);
+	vector<Particle> particles_resample;
 	for (unsigned int i = 0; i < num_particles; ++i)
 	{
 		beta += 2.0*weight_distribution(gen);
