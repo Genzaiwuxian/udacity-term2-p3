@@ -106,7 +106,7 @@ void ParticleFilter::dataAssociation(std::vector<LandmarkObs> predicted, std::ve
 			double obs_x = observations[j].x;
 			double obs_y = observations[j].y;
 
-			double best_distance = 10000.0;
+			double best_distance = 100000.0;
 			int best_id = -1;
 
 			for (decltype(predicted.size()) i = 0; i < predicted.size(); ++i)
@@ -153,8 +153,6 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
 
 	double std_x2 = std_x * std_x;
 	double std_y2 = std_y * std_y;
-
-	vector<double> weights_sum;
 
 	for (unsigned int i=0;i<num_particles;++i)
 	{
@@ -239,10 +237,8 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
 		}
 		// cout<< "weights_diff: " << weights_diff << endl;
 		particles[i].weight = weights_diff;
-		weights_sum.push_back(weights_diff);
 		// cout << "particle: " << i << " weight is " << particles[i].weight << endl;
 	}
-	weights = weights_sum;
 }
 
 void ParticleFilter::resample() {
@@ -250,23 +246,35 @@ void ParticleFilter::resample() {
 	// NOTE: You may find std::discrete_distribution helpful here.
 	//   http://en.cppreference.com/w/cpp/numeric/random/discrete_distribution
 
+	double total_weights = 0;
+	vector<double> weights_sum;
+	for (unsigned int i = 0; i < num_particles; ++i)
+	{
+		weights_sum.push_back(particles[i].weight);
+		total += particles[i].weight;
+	}
+
+	for (unsigned int i = 0; i < num_particles; ++i)
+		weights_sum /= total_weights;
+
+
 	default_random_engine gen;
 	discrete_distribution<int> distribution(0, num_particles);
 	auto index = distribution(gen);
 
-	auto max_weight = *max_element(weights.begin(), weights.end());
+	auto max_weight = *max_element(weights_sum.begin(), weights_sum.end());
 
 	double beta = 0.0;
 
 	uniform_real_distribution<double> weight_distribution(0.0, max_weight);
 	
-	vector<Particle> particles_resample;
+	vector<Particle> particles_resample(num_particles);
 	for (unsigned int i = 0; i < num_particles; ++i)
 	{
 		beta += 2.0*weight_distribution(gen);
-		while (particles[index].weight < beta)
+		while (weights_sum[index] < beta)
 		{
-			beta -= particles[index].weight;
+			beta -= weights_sum[index];
 			index=(index+1)%num_particles;
 		}
 		particles_resample.push_back(particles[index]);
