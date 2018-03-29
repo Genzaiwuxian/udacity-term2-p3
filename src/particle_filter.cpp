@@ -47,11 +47,11 @@ void ParticleFilter::init(double x, double y, double theta, double std[]) {
 			particle.weight = 1.0;
 			particles.push_back(particle);
 
-			cout << "particle id " << particle[i].id << endl;
-			cout << "particle x " << particle[i].x << endl;
-			cout << "particle y " << particle[i].y << endl;
-			cout << "particle theta" << particle[i].theta << endl;
-			cout << "particle weight " << particle[i].weight << endl;
+			cout << "particle id " << particles[i].id << endl;
+			cout << "particle x " << particles[i].x << endl;
+			cout << "particle y " << particles[i].y << endl;
+			cout << "particle theta" << particles[i].theta << endl;
+			cout << "particle weight " << particles[i].weight << endl;
 		}
 
 
