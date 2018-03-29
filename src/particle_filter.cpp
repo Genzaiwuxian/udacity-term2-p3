@@ -46,7 +46,14 @@ void ParticleFilter::init(double x, double y, double theta, double std[]) {
 			particle.theta = dist_theta(gen);
 			particle.weight = 1.0;
 			particles.push_back(particle);
+
+			cout << "particle id " << particle[i].id << endl;
+			cout << "particle x " << particle[i].x << endl;
+			cout << "particle y " << particle[i].y << endl;
+			cout << "particle theta" << particle[i].theta << endl;
+			cout << "particle weight " << particle[i].weight << endl;
 		}
+
 
 		is_initialized = true;
 	}
@@ -231,7 +238,7 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
 				} 
 			}
 		}
-		cout<< "weights_diff: " << weights_diff << endl;
+		// cout<< "weights_diff: " << weights_diff << endl;
 		particles[i].weight = weights_diff;
 		weights_sum.push_back(weights_diff);
 		// cout << "particle: " << i << " weight is " << particles[i].weight << endl;
