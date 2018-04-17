@@ -225,8 +225,8 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
 
 					double diff_y = observations_transform[m].y - predictions[n].y;
 					double diff_y2 = diff_y * diff_y;
-					cout << "diff_x2 " << diff_x2 << endl;
-					cout << "diff_y2 " << diff_y2 << endl;
+					// cout << "diff_x2 " << diff_x2 << endl;
+					// cout << "diff_y2 " << diff_y2 << endl;
 
 					double gauss_norm = (1 / (2 * M_PI*std_x*std_y));
 					double exponent = ((diff_x2) / (2 * std_x2) + (diff_y2) / (2 * std_y2));
