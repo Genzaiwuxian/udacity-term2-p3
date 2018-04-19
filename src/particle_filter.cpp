@@ -27,9 +27,9 @@ void ParticleFilter::init(double x, double y, double theta, double std[]) {
 	if (!is_initialized)
 	{
 		//set total particles number
-		num_particles = 100;
+		num_particles = 200;
 
-		N_thre = 5.0;
+		N_thre = 2.5;
 
 		default_random_engine gen;
 
