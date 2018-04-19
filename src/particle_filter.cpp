@@ -29,6 +29,8 @@ void ParticleFilter::init(double x, double y, double theta, double std[]) {
 		//set total particles number
 		num_particles = 200;
 
+		N_thre = 10;
+
 		default_random_engine gen;
 
 		normal_distribution<double> dist_x(x, std[0]);
@@ -249,41 +251,57 @@ void ParticleFilter::resample() {
 	// NOTE: You may find std::discrete_distribution helpful here.
 	//   http://en.cppreference.com/w/cpp/numeric/random/discrete_distribution
 
-	double total_weights = 0;
-	vector<double> weights_sum;
+	double total_weights = 0.0;
+	double total_weights2 = 0.0;
+	vector<double> weights_arr;
+	vector<double> weights_arr2;
 	for (unsigned int i = 0; i < num_particles; ++i)
 	{
-		weights_sum.push_back(particles[i].weight);
+		weights_arr.push_back(particles[i].weight);
 		total_weights += particles[i].weight;
 	}
 
 	for (unsigned int i = 0; i < num_particles; ++i)
-		weights_sum[i] /= total_weights;
-
-
-	default_random_engine gen;
-	discrete_distribution<int> distribution(0, num_particles);
-	auto index = distribution(gen);
-
-	auto max_weight = *max_element(weights_sum.begin(), weights_sum.end());
-
-	double beta = 0.0;
-
-	uniform_real_distribution<double> weight_distribution(0.0, max_weight);
-	
-	vector<Particle> particles_resample;
+	{
+		weights_arr[i] /= total_weights;
+		weights_arr2[i] = weights_arr[i] * weights_arr[i];
+	}
+		
+	unsigned int N_eff = 0;
 	for (unsigned int i = 0; i < num_particles; ++i)
 	{
-		beta += 2.0*weight_distribution(gen);
-		while (weights_sum[index] < beta)
-		{
-			beta -= weights_sum[index];
-			index=(index+1)%num_particles;
-		}
-		particles_resample.push_back(particles[index]);
+		total_weights2 += weights_arr2[i];
 	}
+	N_eff = 1 / total_weights2;
 
-	particles = particles_resample;
+	// if effective particles number is less than threshold, do the resampling process
+	if (N_eff < N_thre)
+	{
+		default_random_engine gen;
+		discrete_distribution<int> distribution(0, num_particles);
+		auto index = distribution(gen);
+
+		auto max_weight = *max_element(weights_sum.begin(), weights_sum.end());
+
+		double beta = 0.0;
+
+		uniform_real_distribution<double> weight_distribution(0.0, max_weight);
+
+		vector<Particle> particles_resample;
+		for (unsigned int i = 0; i < num_particles; ++i)
+		{
+			beta += 2.0*weight_distribution(gen);
+			while (weights_sum[index] < beta)
+			{
+				beta -= weights_sum[index];
+				index = (index + 1) % num_particles;
+			}
+			particles_resample.push_back(particles[index]);
+		}
+
+		particles = particles_resample;
+	}
+	
 }
 
 Particle ParticleFilter::SetAssociations(Particle& particle, const std::vector<int>& associations, 
