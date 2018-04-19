@@ -266,6 +266,7 @@ void ParticleFilter::resample() {
 	{
 		weights_arr[i] /= total_weights;
 		weights_arr2[i] = weights_arr[i] * weights_arr[i];
+		cout << i << "weights_arr: " << weights_arr[i] << "; " << "weights_arr2: " << weights_arr2 << endl;
 	}
 		
 	double N_eff = 0.0;
