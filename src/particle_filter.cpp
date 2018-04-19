@@ -260,6 +260,7 @@ void ParticleFilter::resample() {
 		weights_arr.push_back(particles[i].weight);
 		total_weights += particles[i].weight;
 	}
+	cout << "total_weights: " << total_weights << endl;
 
 	for (unsigned int i = 0; i < num_particles; ++i)
 	{
