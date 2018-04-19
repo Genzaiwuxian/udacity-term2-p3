@@ -260,13 +260,11 @@ void ParticleFilter::resample() {
 		weights_arr.push_back(particles[i].weight);
 		total_weights += particles[i].weight;
 	}
-	cout << "total_weights: " << total_weights << endl;
 
 	for (unsigned int i = 0; i < num_particles; ++i)
 	{
 		weights_arr[i] /= total_weights;
 		weights_arr2.push_back(weights_arr[i] * weights_arr[i]);
-		cout << i << "weights_arr: " << weights_arr[i] << "; " << "weights_arr2: " << weights_arr2[i] << endl;
 	}
 		
 	double N_eff = 0.0;
@@ -274,7 +272,6 @@ void ParticleFilter::resample() {
 	{
 		total_weights2 += weights_arr2[i];
 	}
-	cout << "total_weights2: "<<total_weights2 << endl;
 	N_eff = 1.0 / total_weights2;
 	cout << "N_eff: " << N_eff << endl;
 
