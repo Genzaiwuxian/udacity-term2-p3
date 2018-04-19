@@ -39,7 +39,7 @@ class ParticleFilter {
 	std::vector<double> weights;
 
 	// number of particles threshold
-	unsigned int N_thre;
+	double N_thre;
 	
 public:
 	

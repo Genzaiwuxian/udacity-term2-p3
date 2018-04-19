@@ -29,7 +29,7 @@ void ParticleFilter::init(double x, double y, double theta, double std[]) {
 		//set total particles number
 		num_particles = 100;
 
-		N_thre = 10;
+		N_thre = 10.0;
 
 		default_random_engine gen;
 
@@ -49,11 +49,11 @@ void ParticleFilter::init(double x, double y, double theta, double std[]) {
 			particle.weight = 1.0;
 			particles.push_back(particle);
 
-			cout << "particle id " << particles[i].id << endl;
-			cout << "particle x " << particles[i].x << endl;
-			cout << "particle y " << particles[i].y << endl;
-			cout << "particle theta" << particles[i].theta << endl;
-			cout << "particle weight " << particles[i].weight << endl;
+			// cout << "particle id " << particles[i].id << endl;
+			// cout << "particle x " << particles[i].x << endl;
+			// cout << "particle y " << particles[i].y << endl;
+			// cout << "particle theta" << particles[i].theta << endl;
+			// cout << "particle weight " << particles[i].weight << endl;
 		}
 
 
@@ -267,12 +267,13 @@ void ParticleFilter::resample() {
 		weights_arr2[i] = weights_arr[i] * weights_arr[i];
 	}
 		
-	unsigned int N_eff = 0;
+	double N_eff = 0.0;
 	for (unsigned int i = 0; i < num_particles; ++i)
 	{
 		total_weights2 += weights_arr2[i];
 	}
-	N_eff = 1 / total_weights2;
+	cout << "total_weights2: "<<total_weights2 << endl;
+	N_eff = 1.0 / total_weights2;
 
 	// if effective particles number is less than threshold, do the resampling process
 	if (N_eff < N_thre)
@@ -301,6 +302,8 @@ void ParticleFilter::resample() {
 
 		particles = particles_resample;
 	}
+	else
+		return particles;
 	
 }
 
