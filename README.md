@@ -29,4 +29,18 @@ after normalizing all particles weights, total weights = 1, make each ID partils
 randomly select one weights between 0 to 2 times of max_weight as beta;
 at each time comparing corrent weights with beta, if larger, duplicate it and do the next loop; if less, deta decrease this particle weights and indicator++, loop until weights is larger than beta.
 
+## Different particle numbers
+set particle number=10, 50, 100, 150, 200 and see performances:
+![image](https://github.com/Genzaiwuxian/udacity-term2-p3/blob/master/figure/differnt%20num%20comparsion.PNG)
+- accuracy of x, y, yaw localization decrease as prticle numbers increase;
+- system time increase;
+- partcile numbers=10~50 can achieve acceptable accuracy and system time;
 
+## Number of effenccy particle
+as particle filter running, most particles will focuse on a narrow area after sampling each time, that can be called as loss of diversity. at the method of sequencial importance resampling, it will calculate Number of Effentive particle, and compared it with Number of threshold which defined by tuning to determine whether perform resampling process or not. this can decrease resmpaling process, so it can improve lack of diversity performace to some extent;
+
+
+
+
+## Reflection
+- particle numbers=150, simulator run out of time, no sure why this situation happen;
