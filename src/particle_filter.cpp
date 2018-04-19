@@ -27,7 +27,7 @@ void ParticleFilter::init(double x, double y, double theta, double std[]) {
 	if (!is_initialized)
 	{
 		//set total particles number
-		num_particles = 200;
+		num_particles = 100;
 
 		N_thre = 10;
 
@@ -281,7 +281,7 @@ void ParticleFilter::resample() {
 		discrete_distribution<int> distribution(0, num_particles);
 		auto index = distribution(gen);
 
-		auto max_weight = *max_element(weights_sum.begin(), weights_sum.end());
+		auto max_weight = *max_element(weights_arr.begin(), weights_arr.end());
 
 		double beta = 0.0;
 
@@ -291,9 +291,9 @@ void ParticleFilter::resample() {
 		for (unsigned int i = 0; i < num_particles; ++i)
 		{
 			beta += 2.0*weight_distribution(gen);
-			while (weights_sum[index] < beta)
+			while (weights_arr[index] < beta)
 			{
-				beta -= weights_sum[index];
+				beta -= weights_arr[index];
 				index = (index + 1) % num_particles;
 			}
 			particles_resample.push_back(particles[index]);
