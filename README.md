@@ -8,10 +8,25 @@ Particle filter with a set of particles to represent posterior distribution of s
 
 ## Particle filter process
 ![image](https://github.com/Genzaiwuxian/udacity-term2-p3/blob/master/figure/particle%20filter%20process.octet-stream)
-- initializationdetermine particle numbers, set particles around initial GPS localization as normal gaussian distribution.
-- predictioneach particle moves as montion model given noise distribution.
-- data associationassociate landmark with real measurement (lindar and radar results). In this project, using neasret neighbor method, that means measurement will bounded with nearest landmark by cauculating distance between each landmarks and measurements.the neaset neighbor method advantage and disadvantage:Advantage: easy to code, simple method and perform well at most conditions;Disadvantage: perform not well at high density measurements; not precise measurement with large noise; not precise motion model; low cauculation effencity, computation complexity= m*n which m is number of particles, and n is landmarks number.
-- update step
 
+- initializationdetermine particle numbers, set particles around initial GPS localization as normal gaussian distribution.
+
+- predictioneach particle moves as montion model given noise distribution.
+
+- data association
+associate landmark with real measurement (lindar and radar results). In this project, using neasret neighbor method, that means measurement will bounded with nearest landmark by cauculating distance between each landmarks and measurements.
+the neaset neighbor method advantage and disadvantage:
+  Advantage: easy to code, simple method and perform well at most conditions;
+  Disadvantage: perform not well at high density measurements; not precise measurement with large noise; not precise motion model; low cauculation effencity, computation complexity= m*n which m is number of particles, and n is landmarks number.
+  
+- update step
+after data associations, calculating distancse between each particles localizatio and landmarks, and then providing weights to each particls by multivariate gaussian probability density
+![image](https://github.com/Genzaiwuxian/udacity-term2-p3/blob/master/figure/multivariate%20gaussian%20probability%20density.PNG)
+
+- resample
+resampling important samples by resampling wheel:
+after normalizing all particles weights, total weights = 1, make each ID partils weights be connected by next order ID+1 particle like a cycle;
+randomly select one weights between 0 to 2 times of max_weight as beta;
+at each time comparing corrent weights with beta, if larger, duplicate it and do the next loop; if less, deta decrease this particle weights and indicator++, loop until weights is larger than beta.
 
 
