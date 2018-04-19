@@ -27,7 +27,7 @@ void ParticleFilter::init(double x, double y, double theta, double std[]) {
 	if (!is_initialized)
 	{
 		//set total particles number
-		num_particles = 200;
+		num_particles = 500;
 
 		N_thre = 2.5;
 
