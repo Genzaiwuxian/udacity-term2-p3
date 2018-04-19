@@ -31,6 +31,7 @@ at each time comparing corrent weights with beta, if larger, duplicate it and do
 
 ## Different particle numbers
 set particle number=10, 50, 100, 150, 200 and see performances:
+
 ![image](https://github.com/Genzaiwuxian/udacity-term2-p3/blob/master/figure/differnt%20num%20comparsion.PNG)
 - accuracy of x, y, yaw localization decrease as prticle numbers increase;
 - system time increase;
