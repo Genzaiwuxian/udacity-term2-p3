@@ -27,7 +27,7 @@ void ParticleFilter::init(double x, double y, double theta, double std[]) {
 	if (!is_initialized)
 	{
 		//set total particles number
-		num_particles = 150;
+		num_particles = 50;
 
 		default_random_engine gen;
 
@@ -47,15 +47,15 @@ void ParticleFilter::init(double x, double y, double theta, double std[]) {
 			particle.weight = 1.0;
 			particles.push_back(particle);
 
-			cout << "particle id " << particles[i].id << endl;
-			cout << "particle x " << particles[i].x << endl;
-			cout << "particle y " << particles[i].y << endl;
-			cout << "particle theta" << particles[i].theta << endl;
-			cout << "particle weight " << particles[i].weight << endl;
+			//cout << "particle id " << particles[i].id << endl;
+			//cout << "particle x " << particles[i].x << endl;
+			//cout << "particle y " << particles[i].y << endl;
+			//cout << "particle theta" << particles[i].theta << endl;
+			//cout << "particle weight " << particles[i].weight << endl;
 		}
 
-		SIR = false;
-		SysR = true;
+		SIR = true;
+		SysR = false;
 
 		is_initialized = true;
 	}
