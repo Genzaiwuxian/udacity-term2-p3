@@ -40,6 +40,12 @@ class ParticleFilter {
 
 	// number of particles threshold
 	double N_thre;
+
+	// Sample impontance resampling algorthium
+	bool SIR;
+
+	// systematic resampling algorthium
+	bool SysR;
 	
 public:
 	

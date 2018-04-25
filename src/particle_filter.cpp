@@ -54,6 +54,8 @@ void ParticleFilter::init(double x, double y, double theta, double std[]) {
 			cout << "particle weight " << particles[i].weight << endl;
 		}
 
+		SIR = false;
+		SysR = true;
 
 		is_initialized = true;
 	}
@@ -210,8 +212,6 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
 		}
 		*/
 		
-
-
 		//update weights
 		double weights_diff = 1.0;
 		for (decltype(observations_transform.size()) m = 0; m < observations_transform.size(); ++m)
@@ -260,30 +260,70 @@ void ParticleFilter::resample() {
 	for (unsigned int i = 0; i < num_particles; ++i)
 		weights_sum[i] /= total_weights;
 
-
-	default_random_engine gen;
-	discrete_distribution<int> distribution(0, num_particles);
-	auto index = distribution(gen);
-
-	auto max_weight = *max_element(weights_sum.begin(), weights_sum.end());
-
-	double beta = 0.0;
-
-	uniform_real_distribution<double> weight_distribution(0.0, max_weight);
-	
-	vector<Particle> particles_resample;
+	//calculate accumulated weights, such as weights_accu[0]=paticles[0].weight, weights_accu[1]=particles[0]+[1].weights
+	vector<double> weights_accu;
+	total_weights = 0;
 	for (unsigned int i = 0; i < num_particles; ++i)
 	{
-		beta += 2.0*weight_distribution(gen);
-		while (weights_sum[index] < beta)
-		{
-			beta -= weights_sum[index];
-			index=(index+1)%num_particles;
-		}
-		particles_resample.push_back(particles[index]);
+		total_weights += weights_sum[i];
+		weights_accu.push_back(total_weights);
 	}
 
-	particles = particles_resample;
+	//Sample importance resampling algorthium
+	if (SIR)
+	{
+		default_random_engine gen;
+		discrete_distribution<int> distribution(0, num_particles);
+		auto index = distribution(gen);
+
+		auto max_weight = *max_element(weights_sum.begin(), weights_sum.end());
+
+		double beta = 0.0;
+
+		uniform_real_distribution<double> weight_distribution(0.0, max_weight);
+
+		vector<Particle> particles_resample;
+		for (unsigned int i = 0; i < num_particles; ++i)
+		{
+			beta += 2.0*weight_distribution(gen);
+			while (weights_sum[index] < beta)
+			{
+				beta -= weights_sum[index];
+				index = (index + 1) % num_particles;
+			}
+			particles_resample.push_back(particles[index]);
+		}
+
+		particles = particles_resample;
+	}
+	
+	if (SysR)
+	{
+		default_random_engine gen;
+		discrete_distribution<int> distribution(0, 1);
+		int ran_discrete = distribution(gen);
+		double system_num = ran_discrete / num_particles;
+		vector<double> weights_random;
+
+		for (unsigned int i = 0; i < num_particles; ++i)
+		{
+			weights_random.push_back(i + system_num);
+		}
+
+		discrete_distribution<int> distribution_index(0, num_particles);
+		auto index = distribution_index(gen);
+
+		vector<Particle> particles_resample;
+		for (unsigned int i = 0; i < num_particles; ++i)
+		{
+			while (weights_sum[index] < weights_random[i])
+				(index++)%num_particles;
+			particles_resample.push_back(particles[index]);
+		}
+		particles = particles_resample;
+	}
+
+
 }
 
 Particle ParticleFilter::SetAssociations(Particle& particle, const std::vector<int>& associations, 
