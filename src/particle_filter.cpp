@@ -283,6 +283,8 @@ void ParticleFilter::resample() {
 		default_random_engine gen;
 		discrete_distribution<int> distribution(0, num_particles);
 		auto ran_discrete = distribution(gen);
+
+
 		double system_num = ran_discrete / (num_particles*num_particles);
 
 		cout << "rand_discrete: " << ran_discrete << endl;
