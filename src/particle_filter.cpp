@@ -54,8 +54,8 @@ void ParticleFilter::init(double x, double y, double theta, double std[]) {
 			//cout << "particle weight " << particles[i].weight << endl;
 		}
 
-		SIR = true;
-		SysR = false;
+		SIR = false;
+		SysR = true;
 
 		is_initialized = true;
 	}
