@@ -281,9 +281,9 @@ void ParticleFilter::resample() {
 	if (SysR)
 	{
 		default_random_engine gen;
-		discrete_distribution<int> distribution(0, 1);
+		discrete_distribution<int> distribution(0, num_particles);
 		int ran_discrete = distribution(gen);
-		double system_num = ran_discrete / num_particles;
+		double system_num = ran_discrete / (num_particles*num_particles);
 
 		cout << "rand_discrete: " << ran_discrete << endl;
 		cout << "system_num: " << system_num << endl;
