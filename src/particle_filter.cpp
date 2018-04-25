@@ -27,7 +27,7 @@ void ParticleFilter::init(double x, double y, double theta, double std[]) {
 	if (!is_initialized)
 	{
 		//set total particles number
-		num_particles = 50;
+		num_particles = 15;
 
 		default_random_engine gen;
 
@@ -192,25 +192,6 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
 
 		//association
 		ParticleFilter::dataAssociation(predictions, observations_transform);
-
-		/*
-		
-		for (unsigned int k = 0; k < predictions.size(); ++k)
-		{
-			cout << "prediction: " << k << endl;
-			cout << predictions[k].id << endl;
-			cout << predictions[k].x << endl;
-			cout << predictions[k].y << endl;
-		}
-
-		for (unsigned int j = 0; j < observations_transform.size(); ++j)
-		{
-			cout << "observations_transform: " << j << endl;
-			cout << observations_transform[j].id << endl;
-			cout << observations_transform[j].x << endl;
-			cout << observations_transform[j].y << endl;
-		}
-		*/
 		
 		//update weights
 		double weights_diff = 1.0;
@@ -303,15 +284,21 @@ void ParticleFilter::resample() {
 		discrete_distribution<int> distribution(0, 1);
 		int ran_discrete = distribution(gen);
 		double system_num = ran_discrete / num_particles;
+
+		cout << "rand_discrete: " << ran_discrete << endl;
+		cout << "system_num: " << system_num << endl;
+
 		vector<double> weights_random;
 
 		for (unsigned int i = 0; i < num_particles; ++i)
 		{
 			weights_random.push_back(i + system_num);
+			cout << "number: " << i << ", weights_random: " << weights_random[i] << endl;
 		}
 
 		discrete_distribution<int> distribution_index(0, num_particles);
 		auto index = distribution_index(gen);
+		cout << "index: " << index << endl;
 
 		vector<Particle> particles_resample;
 		for (unsigned int i = 0; i < num_particles; ++i)
