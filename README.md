@@ -39,7 +39,40 @@ set particle number=10, 50, 100, 150, 200 and see performances:
 
 ## Number of effenccy particle
 as particle filter running, most particles will focuse on a narrow area after sampling each time, that can be called as loss of diversity. at the method of sequencial importance resampling, it will calculate Number of Effentive particle, and compared it with Number of threshold which defined by tuning to determine whether perform resampling process or not. this can decrease resmpaling process, so it can improve lack of diversity performace to some extent;
+a simple way to calculate number of effency particle Neff=1/(sum(weights(n)));
+Then set a threshld of Number, do resampling process when Neff<Nthreshold.
+I tried in my code, and find the precission of whole process preform very good, no lack of diversity appear, so i deleted it in my code.
+Refer to: particle filter in Wiki
 
+## Another resampling method: Systematic resampling
+I tried another Resampling method called Systematic resampling in my code, the systematic resampling means select N spaces (N=particle numbers), and random select one number in each space which means each numbers have same prosition in N spaces, it's weights_sys. Then calculating the accumulated weights of particles weights, during resampling, campare weights_sys with particles accumulated: if more than particles accumulated, the ++index, until select the index which accumulated weights is larger then weights_sys, pass particles[index] to new partiles, the codes are:
+if (SysR)
+	{
+		uniform_real_distribution<double> distribution(0.0, 1.0);
+		auto ran_discrete = distribution(gen);
+
+		vector<double> weights_random;
+		for (unsigned int i = 0; i < num_particles; ++i)
+		{
+			weights_random.push_back((ran_discrete + i) / num_particles);
+		}
+
+		uniform_int_distribution<int> distribution_index(0, num_particles-1);
+		auto index = distribution_index(gen);
+
+		vector<Particle> particles_resample;
+		for (unsigned int i = 0; i < num_particles; ++i)
+		{
+			while (weights_accu[index] < weights_random[i])
+			{
+				(++index) % num_particles;
+			}
+			particles_resample.push_back(particles[index]);
+		}
+		particles = particles_resample;
+	}
+
+number of different particles:
 
 
 
