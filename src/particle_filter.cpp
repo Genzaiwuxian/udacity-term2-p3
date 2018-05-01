@@ -246,6 +246,7 @@ void ParticleFilter::resample() {
 	{
 		total_weights += weights_sum[i];
 		weights_accu.push_back(total_weights);
+		cout << "weights_accu " << i << ": " << weights_accu[i] << endl;
 	}
 
 	//Sample importance resampling algorthium
@@ -296,6 +297,7 @@ void ParticleFilter::resample() {
 		{
 			while (weights_accu[index] < weights_random[i])
 				(++index)%num_particles;
+			cout << "index: " << index << endl;
 			particles_resample.push_back(particles[index]);
 		}
 		particles = particles_resample;
