@@ -28,7 +28,7 @@ void ParticleFilter::init(double x, double y, double theta, double std[]) {
 	if (!is_initialized)
 	{
 		//set total particles number
-		num_particles = 50;
+		num_particles = 100;
 
 		normal_distribution<double> dist_x(x, std[0]);
 		normal_distribution<double> dist_y(y, std[1]);
