@@ -18,6 +18,7 @@
 #include "particle_filter.h"
 
 using namespace std;
+static default_random_engine gen;
 
 void ParticleFilter::init(double x, double y, double theta, double std[]) {
 	// TODO: Set the number of particles. Initialize all particles to first position (based on estimates of 
@@ -27,9 +28,7 @@ void ParticleFilter::init(double x, double y, double theta, double std[]) {
 	if (!is_initialized)
 	{
 		//set total particles number
-		num_particles = 15;
-
-		default_random_engine gen;
+		num_particles = 10;
 
 		normal_distribution<double> dist_x(x, std[0]);
 		normal_distribution<double> dist_y(y, std[1]);
@@ -67,7 +66,6 @@ void ParticleFilter::prediction(double delta_t, double std_pos[], double velocit
 	//  http://en.cppreference.com/w/cpp/numeric/random/normal_distribution
 	//  http://www.cplusplus.com/reference/random/default_random_engine/
 
-	default_random_engine gen;
 	for (decltype(particles.size()) i=0;i<particles.size();++i )
 	{
 		double theta_p = particles[i].theta;
@@ -253,7 +251,6 @@ void ParticleFilter::resample() {
 	//Sample importance resampling algorthium
 	if (SIR)
 	{
-		default_random_engine gen;
 		discrete_distribution<int> distribution(0, num_particles);
 		auto index = distribution(gen);
 
@@ -280,25 +277,17 @@ void ParticleFilter::resample() {
 	
 	if (SysR)
 	{
-		default_random_engine gen;
-		discrete_distribution<int> distribution(0, num_particles);
+		uniform_real_distribution<double> distribution(0.0, 1.0);
 		auto ran_discrete = distribution(gen);
 
-
-		double system_num = ran_discrete / (num_particles*num_particles);
-
-		cout << "rand_discrete: " << ran_discrete << endl;
-		cout << "system_num: " << system_num << endl;
-
 		vector<double> weights_random;
-
 		for (unsigned int i = 0; i < num_particles; ++i)
 		{
-			weights_random.push_back(i + system_num);
+			weights_random.push_back((ran_discrete + i) / num_particles);
 			cout << "number: " << i << ", weights_random: " << weights_random[i] << endl;
 		}
 
-		discrete_distribution<int> distribution_index(0, num_particles);
+		uniform_int_distribution<int> distribution_index(0, num_particles);
 		auto index = distribution_index(gen);
 		cout << "index: " << index << endl;
 
@@ -306,7 +295,7 @@ void ParticleFilter::resample() {
 		for (unsigned int i = 0; i < num_particles; ++i)
 		{
 			while (weights_sum[index] < weights_random[i])
-				(index++)%num_particles;
+				(++index)%num_particles;
 			particles_resample.push_back(particles[index]);
 		}
 		particles = particles_resample;
