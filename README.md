@@ -46,6 +46,7 @@ Refer to: particle filter in Wiki
 
 ## Another resampling method: Systematic resampling
 I tried another Resampling method called Systematic resampling in my code, the systematic resampling means select N spaces (N=particle numbers), and random select one number in each space which means each numbers have same prosition in N spaces, it's weights_sys. Then calculating the accumulated weights of particles weights, during resampling, campare weights_sys with particles accumulated: if more than particles accumulated, the ++index, until select the index which accumulated weights is larger then weights_sys, pass particles[index] to new partiles, the codes are:
+
 if (SysR)
 	{
 		uniform_real_distribution<double> distribution(0.0, 1.0);
