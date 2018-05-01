@@ -37,7 +37,7 @@ set particle number=10, 50, 100, 150, 200 and see performances:
 - system time increase;
 - partcile numbers=10~50 can achieve acceptable accuracy and system time;
 
-## Number of effenccy particle
+## Number of effenccy particle-lack of diversity performance
 as particle filter running, most particles will focuse on a narrow area after sampling each time, that can be called as loss of diversity. at the method of sequencial importance resampling, it will calculate Number of Effentive particle, and compared it with Number of threshold which defined by tuning to determine whether perform resampling process or not. this can decrease resmpaling process, so it can improve lack of diversity performace to some extent;
 a simple way to calculate number of effency particle Neff=1/(sum(weights(n)));
 Then set a threshld of Number, do resampling process when Neff<Nthreshold.
@@ -47,7 +47,7 @@ Refer to: particle filter in Wiki
 ## Another resampling method: Systematic resampling
 I tried another Resampling method called Systematic resampling in my code, the systematic resampling means select N spaces (N=particle numbers), and random select one number in each space which means each numbers have same prosition in N spaces, it's weights_sys. Then calculating the accumulated weights of particles weights, during resampling, campare weights_sys with particles accumulated: if more than particles accumulated, the ++index, until select the index which accumulated weights is larger then weights_sys, pass particles[index] to new partiles, the codes are:
 
-if (SysR)
+	if (SysR)
 	{
 		uniform_real_distribution<double> distribution(0.0, 1.0);
 		auto ran_discrete = distribution(gen);
@@ -74,8 +74,8 @@ if (SysR)
 	}
 
 number of different particles:
-
-
+![image](https://github.com/Genzaiwuxian/udacity-term2-p3/blob/master/figure/sys_compare.PNG)
 
 ## Reflection
 - particle numbers=150, simulator run out of time, no sure why this situation happen;
+- for systematic resampling, as using accumulated weights, if a bigest weight particle is in place n, so most of accumulated weights after n, like n+1, n+2... Number_partciles is equal to 1. during resampling, they are all biger then weights_sys, and be selected into next particles, so for effeciency, it will have a poor performance, we can seen from the results, systematic particles method perform less than SIR(method in udacity classroom) at the same particle numbers. However i think i will have a good effect on lack of diversity performance.
