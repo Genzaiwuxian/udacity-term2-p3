@@ -285,12 +285,10 @@ void ParticleFilter::resample() {
 		for (unsigned int i = 0; i < num_particles; ++i)
 		{
 			weights_random.push_back((ran_discrete + i) / num_particles);
-			cout << "number: " << i << ", weights_random: " << weights_random[i] << endl;
 		}
 
 		uniform_int_distribution<int> distribution_index(0, num_particles-1);
 		auto index = distribution_index(gen);
-		cout << "index: " << index << endl;
 
 		vector<Particle> particles_resample;
 		for (unsigned int i = 0; i < num_particles; ++i)
@@ -299,7 +297,6 @@ void ParticleFilter::resample() {
 			{
 				(++index) % num_particles;
 			}
-			cout << "index: " << index << endl;
 			particles_resample.push_back(particles[index]);
 		}
 		particles = particles_resample;
