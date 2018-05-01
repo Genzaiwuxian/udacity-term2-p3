@@ -294,7 +294,7 @@ void ParticleFilter::resample() {
 		vector<Particle> particles_resample;
 		for (unsigned int i = 0; i < num_particles; ++i)
 		{
-			while (weights_sum[index] < weights_random[i])
+			while (weights_accu[index] < weights_random[i])
 				(++index)%num_particles;
 			particles_resample.push_back(particles[index]);
 		}
